@@ -1,0 +1,239 @@
+:root {
+  --primary: #A9907E;
+  --secondary: #F3DEBA;
+  --success: #82ae82;
+  --danger: #F04646;
+  --darker: #675D50;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'San Francisco', 'SF UI Text', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: inherit;
+  font-weight: 600;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: #aaa;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+body {
+  background-color: #eee;
+  position: relative;
+  animation: fadeInAnimation ease 0.3s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  color: #333;
+  background-size: 150px;
+}
+
+
+/* == NAVBAR == */
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(169, 144, 126, 0.9);
+  padding: 0 1rem;
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  /* display: none; */
+}
+
+.logo {
+  text-decoration: none;
+  color: var(--secondary);
+  padding: 0.5rem 1rem;
+  display: flex;
+}
+
+.logo img {
+  width: 2rem;
+  margin-right: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+.logo h1 {
+  font-size: 1.5rem;
+}
+
+.logo h1 span {
+  margin-left: 0.15rem;
+  font-size: 1rem;
+}
+
+.link-list {
+  font-size: 0.9rem;
+  display: block;
+  list-style: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  transform-origin: top right;
+  transform: scale(0);
+  opacity: 0;
+  transition: ease-in-out 300ms;
+}
+
+.link-list-active {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.link-list li a {
+  background-color: var(--darker);
+  display: block;
+  padding: 1.3rem 3rem;
+  color: var(--secondary);
+  text-decoration: none;
+  text-align: center;
+}
+
+.link-list li a.link-active, 
+.link-list li a:hover {
+  color: var(--secondary);
+  filter: brightness(80%);
+}
+
+.link-list li a.logout {
+  color: white;
+  background-color: var(--danger);
+}
+
+.hamburger-menu {
+  width: 1.8rem;
+  height: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hamburger-menu > span {
+  background-color: var(--secondary);
+  display: block;
+  width: inherit;
+  height: 3px;
+  transition: ease-in-out 300ms;
+}
+
+.hamburger-active > span:nth-child(1) {
+  transform-origin: bottom left;
+  transform: rotate(45deg);
+  position: relative;
+  top: -1.6px;
+}
+
+.hamburger-active > span:nth-child(2) {
+  transform: scale(0);
+}
+
+.hamburger-active > span:nth-child(3) {
+  transform-origin: top left;
+  transform: rotate(-45deg);
+  position: relative;
+  bottom: -1.6px;
+}
+
+
+/* == FOOTER == */
+.footer-container {
+  color: var(--secondary);
+  background-color: var(--darker);
+  font-size: 0.7rem;
+  text-align: center;
+  padding: 2rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+
+@media only screen and (min-width: 768px) {
+  /* == NAVBAR == */
+  .logo {
+    font-size: 1.6rem;
+    padding: 0.5rem 2rem;
+  }
+
+  .nav-container {
+    padding: 0 4rem;
+  }
+
+  .hamburger-menu {
+    display: none;
+  }
+
+  .link-list {
+    opacity: 1;
+    transform: scale(1);
+    position: static;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .link-list li a {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    background-color: transparent;
+  }
+
+  .link-list li a.link-active, 
+  .link-list li a:hover {
+    filter: brightness(100%);
+    border-bottom: 5px solid var(--secondary);
+  }
+
+  .link-list li a.logout {
+    padding: 0.5rem 1.2rem;
+    border-radius: 0.5rem;
+    margin-left: 2rem;
+  }
+
+  .link-list li a.logout:hover {
+    border: 0;
+    filter: brightness(80%);
+  }
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
