@@ -48,7 +48,7 @@ function hapusProduk($id)
     $stmt = $conn->prepare("DELETE FROM products WHERE  kodeProduk =:kodeProduk");
     $stmt->bindvalue(":kodeProduk", $id);
     $stmt->execute();
-    if(file_exists("../../assets/img/product/{$data[0]["gambarProduk"]}")){
+    if (file_exists("../../assets/img/product/{$data[0]["gambarProduk"]}")) {
         unlink('../../assets/img/product/' . $data[0]["gambarProduk"]);
     }
     return $stmt->rowCount();
@@ -88,9 +88,9 @@ function editProduk($data)
     } else {
         $gambar = upload();
         $oldGambar = selectData("SELECT gambarProduk FROM products WHERE kodeProduk=$id");
-        if(file_exists('../../assets/img/product/' . $oldGambar[0]["gambarProduk"])){
+        if (file_exists('../../assets/img/product/' . $oldGambar[0]["gambarProduk"])) {
             unlink('../../assets/img/product/' . $oldGambar[0]["gambarProduk"]);
-        }        
+        }
     };
     $query = "UPDATE products 
     SET kodeKategori=:kategori, kodeSuplaier=:suplaier, namaProduk=:nama, gambarProduk=:gambar, hargaProduk=:harga, stokProduk=:stok, deskripsiProduk=:deskripsi
@@ -238,7 +238,8 @@ function addPembayaran($kodePesanan, $metode)
 }
 
 // ADD WALLET
-function addWallet($kodePelanggan) {
+function addWallet($kodePelanggan)
+{
     global $conn;
     $stmt = $conn->prepare(
         "INSERT INTO wallet (kodePelanggan, namaWallet)
@@ -249,10 +250,11 @@ function addWallet($kodePelanggan) {
 }
 
 // EDIT WALLET
-function editWallet($kodePelanggan, $nomorDana, $nomorGopay, $nomorOvo) {
+function editWallet($kodePelanggan, $nomorDana, $nomorGopay, $nomorOvo)
+{
     global $conn;
 
-    if($nomorDana) {
+    if ($nomorDana) {
         $stmt = $conn->prepare(
             "UPDATE wallet 
             SET nomorWallet = '$nomorDana'
@@ -261,7 +263,7 @@ function editWallet($kodePelanggan, $nomorDana, $nomorGopay, $nomorOvo) {
         $stmt->execute();
     }
 
-    if($nomorGopay) {
+    if ($nomorGopay) {
         $stmt = $conn->prepare(
             "UPDATE wallet 
             SET nomorWallet = '$nomorGopay'
@@ -270,7 +272,7 @@ function editWallet($kodePelanggan, $nomorDana, $nomorGopay, $nomorOvo) {
         $stmt->execute();
     }
 
-    if($nomorOvo) {
+    if ($nomorOvo) {
         $stmt = $conn->prepare(
             "UPDATE wallet 
             SET nomorWallet = '$nomorOvo'
@@ -284,104 +286,119 @@ function editWallet($kodePelanggan, $nomorDana, $nomorGopay, $nomorOvo) {
 
 
 // Mengabsahan / validasi suatu data
-function terisikan($metodeKirim, $dalamIsian) { // Apakah sudah terisi?
-	if (!isset($metodeKirim[$dalamIsian]) || $metodeKirim[$dalamIsian] == '') {
+function terisikan($metodeKirim, $dalamIsian)
+{ // Apakah sudah terisi?
+    if (!isset($metodeKirim[$dalamIsian]) || $metodeKirim[$dalamIsian] == '') {
         $GLOBALS['gagal'] = TRUE;
-		return "Harusnya diisi"; // Kembali jika tidak terisi
-	} else {
-		return validasiSesuatu_1($metodeKirim, $dalamIsian); // Lanjut ke...
-	}
+        return "Harusnya diisi"; // Kembali jika tidak terisi
+    } else {
+        return validasiSesuatu_1($metodeKirim, $dalamIsian); // Lanjut ke...
+    }
 }
-function validasiSesuatu_1($metodeKirim, $dalamIsian) { // ... fungsi validasi validasiSesuatu_1
-	switch ($dalamIsian) {
-		case 'nama':
-			if (preg_match("/[\^<,\"@\/\{\}\(\)\*\$%\?=>:\|;#]+/i", $metodeKirim[$dalamIsian])) {
+function validasiSesuatu_1($metodeKirim, $dalamIsian)
+{ // ... fungsi validasi validasiSesuatu_1
+    switch ($dalamIsian) {
+        case 'nama':
+            if (preg_match("/[\^<,\"@\/\{\}\(\)\*\$%\?=>:\|;#]+/i", $metodeKirim[$dalamIsian])) {
                 $GLOBALS['gagal'] = TRUE;
                 return "Kesalahan dalam nama supplier/pemasok";
-            } break;
-		case 'namaProduk':
-			if (preg_match("/[\^<,\"@\/\{\}\(\)\*\$%\?=>:\|;#]+/i", $metodeKirim[$dalamIsian])) {
+            }
+            break;
+        case 'namaProduk':
+            if (preg_match("/[\^<,\"@\/\{\}\(\)\*\$%\?=>:\|;#]+/i", $metodeKirim[$dalamIsian])) {
                 $GLOBALS['gagal'] = TRUE;
                 return "Kesalahan dalam nama produk";
-            } break;
-		case 'no':
+            }
+            break;
+        case 'no':
             if (!preg_match("/^[0-9]{10,15}$/", $metodeKirim[$dalamIsian])) {
                 $GLOBALS['gagal'] = TRUE;
                 return "Biasanya nomor telepon hanya lokal (Indonesia) 10-15 karakter";
-            } break;
+            }
+            break;
         case 'harga':
-			if (!preg_match("/^[0-9]$/", $metodeKirim[$dalamIsian])) {
+            if (!preg_match("/^[0-9]$/", $metodeKirim[$dalamIsian])) {
                 $GLOBALS['gagal'] = TRUE;
                 return "Hanya diisi angka. Jadi sudah termasuk \"IDR\"";
-            } break;
+            }
+            break;
         case 'stok':
-			if (!preg_match("/^[0-9]$/", $metodeKirim[$dalamIsian])) {
+            if (!preg_match("/^[0-9]$/", $metodeKirim[$dalamIsian])) {
                 $GLOBALS['gagal'] = TRUE;
                 return "Stok yang diisikan hanyalah angka";
-            } break;
+            }
+            break;
         case 'deskripsi':
-			if (!preg_match("/^[\w\-\d\.\!\%\&]$/", $metodeKirim[$dalamIsian])) {
+            if (!preg_match("/^[\w\-\d\.\!\%\&]$/", $metodeKirim[$dalamIsian])) {
                 $GLOBALS['gagal'] = TRUE;
                 return "Biasanya deskripsi yang singkat dan teks latin";
-            } break;
-		default:
-			break;
-	}
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 /* VALIDASI */
 
 // Inputan tidak boleh kosong produk & supplier
-function validAll(&$errors, $arr){
-    $ket="Wajib diisi !!!";
-    foreach($arr as $key => $val){
-        if($val==""){
+function validAll(&$errors, $arr)
+{
+    $ket = "Wajib diisi !!!";
+    foreach ($arr as $key => $val) {
+        if ($val == "") {
             $errors[$key] = $ket;
         }
     }
 }
 
 // validasi alfa numerik produk & supplier
-function validAlfa(&$errors, $arr, $val){
+function validAlfa(&$errors, $arr, $val)
+{
     $pattern = "/^(?=.*[a-zA-Z])[a-zA-Z ]+$/";
-    if (!preg_match($pattern, $arr[$val]) && $arr[$val]!=""){
+    if (!preg_match($pattern, $arr[$val]) && $arr[$val] != "") {
         $errors[$val] = "Inputan harus huruf (Alfabet) !!!";
     }
 }
 
 // validasi numerik produk & supplier
-function validNum(&$errors, $arr, $val){
+function validNum(&$errors, $arr, $val)
+{
     $pattern = "/^[0-9]+$/";
-    if (!preg_match($pattern, $arr[$val]) && $arr[$val]!=""){
+    if (!preg_match($pattern, $arr[$val]) && $arr[$val] != "") {
         $errors[$val] = "Inputan harus angka (jangan ada spasi dan '.') !!!";
     }
 }
 
 // validasi Alfa numerik produk & supplier
-function validAlfaNum(&$errors, $arr, $val){
+function validAlfaNum(&$errors, $arr, $val)
+{
     $pattern = "/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z \d]+$/";
-    if (!preg_match($pattern, $arr[$val]) && $arr[$val]!=""){
+    if (!preg_match($pattern, $arr[$val]) && $arr[$val] != "") {
         $errors[$val] = "Inputan harus huruf dan angka saja (tanpa simbol)!!!";
     }
 }
 
 // validasi numerik length for no supplier
-function validNumLen(&$errors, $arr, $val){
+function validNumLen(&$errors, $arr, $val)
+{
     $pattern = "/^[0-9]{10,13}+$/";
-    if (!preg_match($pattern, $arr[$val]) && $arr[$val]!=""){
+    if (!preg_match($pattern, $arr[$val]) && $arr[$val] != "") {
         $errors[$val] = "Inputan harus angka (awalan 0 bukan +62) (tanpa '-' dan 'spasi') (berjumlah  10-13 digit) !!!";
     }
 }
-function validWallet(&$errors, $arr, $val){
+function validWallet(&$errors, $arr, $val)
+{
     $pattern = "/^[0-9]{10,13}+$/";
-    if (!preg_match($pattern, $arr[$val]) && $arr[$val]!=""){
+    if (!preg_match($pattern, $arr[$val]) && $arr[$val] != "") {
         $errors[$val] = "Inputan harus angka (berjumlah  10-13 digit) !!!";
     }
 }
 
 // mengecek error
-function cekError($errors,$val){
-    if(isset($errors[$val])){
+function cekError($errors, $val)
+{
+    if (isset($errors[$val])) {
         echo $errors[$val];
     }
 }
